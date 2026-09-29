@@ -12,7 +12,13 @@ export type GitHubPreferencesMinimal = {
 };
 
 export type FilterType =
-  "my" | "assigned" | "mentioning" | "my-merged" | "my-closed";
+  | "inbox"
+  | "my"
+  | "assigned"
+  | "mentioning"
+  | "incoming"
+  | "my-merged"
+  | "my-closed";
 
 export type Repository =
   RestEndpointMethodTypes["repos"]["listForAuthenticatedUser"]["response"]["data"][number];

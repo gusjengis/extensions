@@ -2,12 +2,16 @@ import { FilterType } from "../types";
 
 export function getPullRequestFilterQuery(filterType: FilterType, query = "") {
   switch (filterType) {
+    case "inbox":
+      return `involves:@me is:pr state:open ${query}`;
     case "my":
       return `author:@me is:pr state:open ${query}`;
     case "assigned":
       return `review-requested:@me is:pr state:open ${query}`;
     case "mentioning":
       return `mentions:@me is:pr state:open ${query}`;
+    case "incoming":
+      return `user:@me is:pr state:open -author:@me ${query}`;
     case "my-merged":
       return `author:@me is:pr is:merged ${query}`;
     case "my-closed":

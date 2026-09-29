@@ -1,11 +1,11 @@
-import { Action, ActionPanel, getPreferenceValues, List } from "@vicinae/api";
+import { Action, ActionPanel, List } from "@vicinae/api";
 import { useState } from "react";
 
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useDebounce } from "@uidotdev/usehooks";
 import { prDropdownItems } from "./config";
 import { persister, queryClient } from "./queryClient";
-import type { FilterType, GitHubPreferences } from "./types";
+import type { FilterType } from "./types";
 import { useGetMyRepos } from "./hooks/useGetRepos";
 import { useGetPullRequests } from "./hooks/useGetPullRequests";
 
@@ -20,10 +20,8 @@ function PullRequests() {
   );
 }
 
-const { defaultIssueFilter } = getPreferenceValues<GitHubPreferences>();
-
 function Command() {
-  const [filter, setFilter] = useState<FilterType>(defaultIssueFilter || "my");
+  const [filter, setFilter] = useState<FilterType>("inbox");
   const [searchText, setSearchText] = useState("");
   const debouncedSearchText = useDebounce(searchText, 300);
 
@@ -43,7 +41,6 @@ function Command() {
       searchBarAccessory={
         <List.Dropdown
           tooltip="Filter PRs"
-          storeValue={true}
           value={filter}
           onChange={(newValue) => setFilter(newValue as FilterType)}
         >
@@ -84,7 +81,7 @@ function Command() {
           <List.Item
             key={pr.id}
             title={pr.title}
-            subtitle={`#${pr.number} in ${repoName}`}
+            subtitle={`#${pr.number} by @${pr.user?.login ?? "unknown"} in ${repoName}`}
             icon={{ source: `pr_${status.toLowerCase()}.svg` }}
             accessories={[{ text: status }]}
             actions={
